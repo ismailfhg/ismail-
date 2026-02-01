@@ -8,17 +8,18 @@ app.use(express.static('public'));
 io.on('connection', socket => {
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId);
-        socket.broadcast.to(roomId).emit('user-connected', userId);
-        
-        socket.on('chat-msg', (data) => {
-            io.to(roomId).emit('new-msg', data);
+        // Yeni istifadəçi gələndə digərlərinə xəbər ver
+        socket.to(roomId).emit('user-connected', userId);
+
+        socket.on('message', (message) => {
+            io.to(roomId).emit('createMessage', message, userId);
         });
 
         socket.on('disconnect', () => {
-            socket.broadcast.to(roomId).emit('user-disconnected', userId);
+            socket.to(roomId).emit('user-disconnected', userId);
         });
     });
 });
 
 const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => console.log(`PHOENIX GLOBAL NODE ACTIVE ON ${PORT}`));
+server.listen(PORT, () => console.log(`Server port ${PORT}-da aktivdir`));
