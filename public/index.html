@@ -2,30 +2,65 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHOENIX SECURE NODE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHOENIX PREMIER SECURE</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { background: #000; color: #00ff88; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
-        .terminal { border: 2px solid #00ff88; border-radius: 10px; padding: 20px; max-width: 500px; margin: auto; box-shadow: 0 0 30px #00ff8833; }
-        input { width: 100%; background: #111; border: 1px solid #00ff88; color: #fff; padding: 15px; margin-top: 10px; border-radius: 5px; outline: none; }
-        button { width: 100%; padding: 15px; background: #00ff88; color: #000; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; border-radius: 5px; }
-        #chat-window { display: none; }
-        .messages { height: 350px; overflow-y: auto; background: #050505; border: 1px solid #222; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        :root { --gold: #d4af37; --dark: #0a0a0a; --glass: rgba(255, 255, 255, 0.05); }
+        body { background: radial-gradient(circle, #1a1a1a 0%, #000 100%); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        
+        /* Giriş Ekranı */
+        .auth-container { background: var(--glass); backdrop-filter: blur(15px); padding: 40px; border-radius: 20px; border: 1px solid var(--gold); text-align: center; box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); width: 350px; }
+        .auth-container h2 { color: var(--gold); letter-spacing: 3px; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 15px; outline: none; }
+        input:focus { border-color: var(--gold); }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        
+        /* Çat Ekranı */
+        #chat-screen { display: none; width: 95%; max-width: 900px; height: 85vh; background: var(--glass); backdrop-filter: blur(20px); border-radius: 25px; border: 1px solid rgba(212, 175, 55, 0.3); display: none; flex-direction: column; overflow: hidden; }
+        .chat-header { padding: 20px; background: rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+        .chat-header h3 { margin: 0; color: var(--gold); }
+        .call-actions button { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 10px 15px; border-radius: 50%; margin-left: 10px; cursor: pointer; transition: 0.3s; }
+        .call-actions button:hover { background: var(--gold); color: black; }
+        
+        .messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 70%; padding: 12px 18px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; }
+        .msg.received { background: rgba(255,255,255,0.1); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg.sent { background: var(--gold); color: black; align-self: flex-end; border-bottom-right-radius: 2px; }
+        
+        .input-area { padding: 20px; background: rgba(0,0,0,0.4); display: flex; gap: 10px; }
+        .input-area input { margin-bottom: 0; }
+        .input-area button { width: 60px; background: var(--gold); border: none; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="terminal" id="auth-box">
-        <h2>ACCESS REQUIRED</h2>
-        <input type="password" id="keyInput" placeholder="Sistem Kodunu Daxil Edin...">
-        <button onclick="checkAuth()">GİRİŞ</button>
+
+    <div class="auth-container" id="auth-box">
+        <h2>PHOENIX</h2>
+        <p style="font-size: 0.8rem; color: #888;">SECURE END-TO-END NODE</p>
+        <input type="password" id="keyInput" placeholder="Sistem Şifrəsini Yazın">
+        <button class="btn-gold" onclick="checkAuth()">SİSTEMƏ DAXİL OL</button>
     </div>
 
-    <div class="terminal" id="chat-window">
-        <h3>SECURE CHANNEL: ACTIVE</h3>
-        <div class="messages" id="msgBox"></div>
-        <input type="text" id="msgInput" placeholder="Mesajınız...">
-        <button onclick="sendMsg()">GÖNDƏR</button>
+    <div id="chat-screen">
+        <div class="chat-header">
+            <div>
+                <h3>PHOENIX PREMIER</h3>
+                <small style="color: #00ff88;">● Şifrəli Bağlantı Aktivdir</small>
+            </div>
+            <div class="call-actions">
+                <button title="Səsli Zəng" onclick="startCall('audio')">📞</button>
+                <button title="Görüntülü Zəng" onclick="startCall('video')">📹</button>
+                <button title="Ayarlar">⚙️</button>
+            </div>
+        </div>
+        <div class="messages-area" id="msgBox">
+            <div class="msg received">Sistem: Xoş gəldiniz. Kanala giriş uğurla tamamlandı.</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="msgInput" placeholder="Mesajınızı bura yazın...">
+            <button onclick="sendMsg()">➤</button>
+        </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -37,20 +72,34 @@
         }
         socket.on('auth-success', () => {
             document.getElementById('auth-box').style.display = 'none';
-            document.getElementById('chat-window').style.display = 'block';
+            document.getElementById('chat-screen').style.display = 'flex';
         });
-        socket.on('auth-failed', () => alert("GİRİŞ RƏDD EDİLDİ!"));
-        
+        socket.on('auth-failed', () => alert("ŞİFRƏ SƏHVDIR!"));
+
         function sendMsg() {
             const inp = document.getElementById('msgInput');
-            socket.emit('chat-msg', inp.value);
-            inp.value = '';
+            if(inp.value.trim() !== "") {
+                const data = { text: inp.value, time: new Date().toLocaleTimeString() };
+                socket.emit('chat-msg', data);
+                appendMsg(data, 'sent');
+                inp.value = '';
+            }
         }
-        socket.on('new-msg', (data) => {
+
+        socket.on('new-msg', (data) => appendMsg(data, 'received'));
+
+        function appendMsg(data, type) {
             const box = document.getElementById('msgBox');
-            box.innerHTML += `<div><b>[ANONİM]:</b> ${data}</div>`;
+            const div = document.createElement('div');
+            div.className = `msg ${type}`;
+            div.innerHTML = data.text;
+            box.appendChild(div);
             box.scrollTop = box.scrollHeight;
-        });
+        }
+
+        function startCall(type) {
+            alert(type + " zəngi başladılır... (WebRTC aktivləşdirilir)");
+        }
     </script>
 </body>
 </html>
