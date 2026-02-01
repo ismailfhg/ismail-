@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PHOENIX SECURE NODE</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { background: #000; color: #00ff88; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
+        .terminal { border: 2px solid #00ff88; border-radius: 10px; padding: 20px; max-width: 500px; margin: auto; box-shadow: 0 0 30px #00ff8833; }
+        input { width: 100%; background: #111; border: 1px solid #00ff88; color: #fff; padding: 15px; margin-top: 10px; border-radius: 5px; outline: none; }
+        button { width: 100%; padding: 15px; background: #00ff88; color: #000; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; border-radius: 5px; }
+        #chat-window { display: none; }
+        .messages { height: 350px; overflow-y: auto; background: #050505; border: 1px solid #222; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="terminal" id="auth-box">
+        <h2>ACCESS REQUIRED</h2>
+        <input type="password" id="keyInput" placeholder="Sistem Kodunu Daxil Edin...">
+        <button onclick="checkAuth()">GİRİŞ</button>
+    </div>
+
+    <div class="terminal" id="chat-window">
+        <h3>SECURE CHANNEL: ACTIVE</h3>
+        <div class="messages" id="msgBox"></div>
+        <input type="text" id="msgInput" placeholder="Mesajınız...">
+        <button onclick="sendMsg()">GÖNDƏR</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        function checkAuth() {
+            const key = document.getElementById('keyInput').value;
+            socket.emit('authenticate', key);
+        }
+        socket.on('auth-success', () => {
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('chat-window').style.display = 'block';
+        });
+        socket.on('auth-failed', () => alert("GİRİŞ RƏDD EDİLDİ!"));
+        
+        function sendMsg() {
+            const inp = document.getElementById('msgInput');
+            socket.emit('chat-msg', inp.value);
+            inp.value = '';
+        }
+        socket.on('new-msg', (data) => {
+            const box = document.getElementById('msgBox');
+            box.innerHTML += `<div><b>[ANONİM]:</b> ${data}</div>`;
+            box.scrollTop = box.scrollHeight;
+        });
+    </script>
+</body>
+</html>
